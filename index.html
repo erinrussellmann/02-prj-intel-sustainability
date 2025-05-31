@@ -5,9 +5,133 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Intel: Sustainability Through the Ages</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Show on small screens, hide on large screens */
+    .show-mobile {
+      display: block;
+    }
+    .show-desktop {
+      display: none;
+    }
+    @media (min-width: 768px) {
+      /* Hide on small, show on large screens */
+      .show-mobile {
+        display: none;
+      }
+      .show-desktop {
+        display: block;
+      }
+    }
+
+    /* ====== Header Styling Starts Here ====== */
+    header {
+      /* Add a soft blue background for a professional look */
+      background: linear-gradient(90deg, #e3f0ff 0%, #b6d0f7 100%);
+      padding: 18px 0 12px 0; /* Less space above and below for a tighter look */
+      text-align: center; /* Center all header content */
+      border-bottom: 4px solid #0071c5; /* Add a bold blue border at the bottom */
+      box-shadow: 0 4px 12px rgba(0, 113, 197, 0.07); /* Soft shadow for depth */
+    }
+    header img {
+      /* Make the logo a bit larger and add space below */
+      width: 110px;
+      margin-bottom: 10px; /* Less space below logo */
+    }
+    header h1 {
+      /* Fun but professional font size and color */
+      font-size: 1.7em; /* Slightly smaller for tightness */
+      color: #0071c5; /* Intel blue */
+      margin-bottom: 6px; /* Less space below heading */
+      letter-spacing: 1px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      /* Add a subtle text shadow for fun */
+      text-shadow: 1px 2px 8px #e3f0ff;
+    }
+    header p {
+      /* Softer color for the subheading */
+      color: #333;
+      font-size: 1em; /* Slightly smaller for tightness */
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 10px 16px; /* More padding for emphasis */
+      background: #f5faff; /* Very light blue background */
+      border-left: 4px solid #0071c5; /* Blue bar on the left */
+      border-radius: 8px; /* Rounded corners for a friendly look */
+      box-shadow: 0 2px 8px rgba(0, 113, 197, 0.05); /* Soft shadow */
+    }
+    /* ====== Header Styling Ends Here ====== */
+
+    /* ====== Timeline Styling Starts Here ====== */
+    .timeline-container {
+      display: flex; /* Arrange cards in a row */
+      overflow-x: auto; /* Enable horizontal scrolling */
+      scroll-snap-type: x mandatory; /* Enable scroll snap on x-axis */
+      gap: 16px; /* Space between cards */
+      padding: 24px 0 24px 40px; /* Extra left padding only, no right padding */
+      justify-content: flex-start; /* Start cards at the left */
+      /* 
+        The scroll-snap-type property makes the cards "snap" into place 
+        as you scroll horizontally.
+        The extra left padding helps the first card center when snapped,
+        but the timeline starts at the very first card.
+      */
+    }
+    .card {
+      scroll-snap-align: center; /* Snap each card to the center of the container */
+      min-width: 350px; /* Make cards wider so you see fewer at a time */
+      background: #fff; /* White background for cards */
+      border-radius: 12px; /* Rounded corners for cards */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow for cards */
+      overflow: hidden; /* Clip overflow content */
+      position: relative; /* Position for overlay text */
+      transition: 
+        transform 0.3s, 
+        box-shadow 0.3s; /* Smooth transform and shadow for hover effect */
+      /* 
+        The scroll-snap-align property tells the browser to align 
+        the card to the center when scrolling stops.
+      */
+    }
+    .card:hover {
+      transform: translateY(-8px) scale(1.03); /* Lift and slightly enlarge card on hover */
+      box-shadow: 0 12px 24px rgba(0, 113, 197, 0.18), 0 2px 8px rgba(0,0,0,0.10); /* Stronger blue shadow on hover */
+      /* 
+        On hover, the card moves up and gets a bigger, colored shadow.
+        This makes the card "pop" out for the user.
+      */
+    }
+    .card img {
+      width: 100%; /* Full width images */
+      height: 180px; /* Set a fixed height for all images */
+      object-fit: cover; /* Crop images to fill the area without stretching */
+      /* 
+        All card images will now be the same size.
+        object-fit: cover keeps the image looking good even if the aspect ratio is different.
+      */
+    }
+    .overlay {
+      position: absolute; /* Position overlay text */
+      top: 0; /* Align to top */
+      left: 0; /* Align to left */
+      right: 0; /* Align to right */
+      bottom: 0; /* Align to bottom */
+      display: flex; /* Flexbox for centering */
+      align-items: center; /* Center vertically */
+      justify-content: center; /* Center horizontally */
+      background: rgba(0, 113, 197, 0.8); /* Semi-transparent blue */
+      color: #fff; /* White text color */
+      font-size: 1.2em; /* Larger font size */
+      padding: 16px; /* Padding around text */
+      opacity: 0; /* Hidden by default */
+      transition: opacity 0.3s; /* Smooth opacity transition */
+    }
+    .card:hover .overlay {
+      opacity: 1; /* Show overlay on hover */
+    }
+    /* ====== Timeline Styling Ends Here ====== */
+  </style>
 </head>
 <body>
-
   <!-- Header / Hero Section -->
   <header>
     <div>
@@ -27,11 +151,29 @@
     </div>
   </header>
 
-  <!-- Timeline Cards Section -->
-  <section>
+  <!-- Timeline instructions for mobile (shown only on small screens) -->
+  <p id="timeline-instructions" class="show-mobile" style="text-align: center;">
+    Scroll to view timeline | Hover over cards to learn more!
+  </p>
 
+  <!-- Timeline Cards Section -->
+  <!-- 
+    We wrap all the cards in a container with horizontal scrolling.
+    This lets us use scroll snap so each card "snaps" into place as you scroll.
+  -->
+  <section 
+    class="timeline-container"
+    style="
+      display: flex; /* Arrange cards in a row */
+      overflow-x: auto; /* Enable horizontal scrolling */
+      scroll-snap-type: x mandatory; /* Enable scroll snap on x-axis */
+      gap: 16px; /* Space between cards */
+      padding: 24px 0 24px 40px; /* Extra left padding only, no right padding */
+      justify-content: flex-start; /* Start cards at the left */
+    "
+  >
     <!-- Card 1: 1968 -->
-    <div>
+    <div class="card" style="scroll-snap-align: center; min-width: 350px;">
       <h2>1968</h2>
       <h3>Intel Founded</h3>
       <img src="img/1.jpg" alt="Placeholder Image" />
@@ -40,10 +182,14 @@
         NM Electronics to Intel Corporation, laying the foundation for 
         decades of technological innovation.
       </p>
+      <!-- Overlay text shown on hover -->
+      <div class="overlay">
+        Intel is founded, starting a journey of innovation.
+      </div>
     </div>
 
     <!-- Card 2: 1971 -->
-    <div>
+    <div class="card" style="scroll-snap-align: center; min-width: 350px;">
       <h2>1971</h2>
       <h3>First Microprocessor</h3>
       <img src="img/2.jpg" alt="Placeholder Image" />
@@ -52,10 +198,13 @@
         igniting the microprocessor revolution and propelling the future 
         of computing devices.
       </p>
+      <div class="overlay">
+        The 4004 microprocessor changes computing forever.
+      </div>
     </div>
 
     <!-- Card 3: 1978 -->
-    <div>
+    <div class="card" style="scroll-snap-align: center; min-width: 350px;">
       <h2>1978</h2>
       <h3>8086 Processor</h3>
       <img src="img/3.jpg" alt="Placeholder Image" />
@@ -63,10 +212,13 @@
         Launch of the 8086 processor, establishing the x86 architecture 
         that drives countless PCs and servers in the modern era.
       </p>
+      <div class="overlay">
+        The 8086 processor launches the x86 era.
+      </div>
     </div>
 
     <!-- Card 4: 1985 -->
-    <div>
+    <div class="card" style="scroll-snap-align: center; min-width: 350px;">
       <h2>1985</h2>
       <h3>386 Processor</h3>
       <img src="img/4.jpg" alt="Placeholder Image" />
@@ -75,69 +227,97 @@
         ushering in a new era of performance and multitasking for 
         personal computers.
       </p>
+      <div class="overlay">
+        The 386 brings 32-bit power to PCs.
+      </div>
     </div>
 
     <!-- Card 5: 2006 -->
-    <div>
+    <div class="card" style="scroll-snap-align: center; min-width: 350px;">
       <h2>2006</h2>
       <h3>Peak GHG Emissions</h3>
-      <img src="https://placehold.co/250x100" alt="Placeholder Image" />
+      <img src="img/5.png" alt="Placeholder Image" />
       <p>
         This year marks Intel's highest annual greenhouse gas emissions 
         for operations. Over subsequent years, Intel invests heavily in 
         chemical abatement, renewable energy, and energy-efficient 
         manufacturing to reverse this trend.
       </p>
+      <div class="overlay">
+        Intel begins major sustainability efforts after peak emissions.
+      </div>
     </div>
 
     <!-- Card 6: 2020 -->
-    <div>
+    <div class="card" style="scroll-snap-align: center; min-width: 350px;">
       <h2>2020</h2>
       <h3>RISE Strategy</h3>
-      <img src="https://placehold.co/250x100" alt="Placeholder Image" />
+      <img src="img/6.png" alt="Placeholder Image" />
       <p>
         Intel launches its RISE (Responsible, Inclusive, Sustainable, 
         Enabling) strategy and 2030 goals, aiming to drive industry-wide 
         progress on climate action, water stewardship, and waste reduction.
       </p>
+      <div class="overlay">
+        RISE strategy sets bold goals for 2030.
+      </div>
     </div>
 
     <!-- Card 7: 2022 -->
-    <div>
+    <div class="card" style="scroll-snap-align: center; min-width: 350px;">
       <h2>2022</h2>
       <h3>Net-Zero By 2040</h3>
-      <img src="https://placehold.co/250x100" alt="Placeholder Image" />
+      <img src="img/7.png" alt="Placeholder Image" />
       <p>
         Intel announces its commitment to achieve net-zero greenhouse 
         gas emissions (Scope 1 and 2) across its global operations 
         by 2040, building on years of environmental initiatives.
       </p>
+      <div class="overlay">
+        Intel commits to net-zero emissions by 2040.
+      </div>
     </div>
 
     <!-- Card 8: 2023 -->
-    <div>
+    <div class="card" style="scroll-snap-align: center; min-width: 350px;">
       <h2>2023</h2>
       <h3>Renewable Electricity</h3>
-      <img src="https://placehold.co/250x100" alt="Placeholder Image" />
+      <img src="img/8.png" alt="Placeholder Image" />
       <p>
         The company achieves 99% renewable electricity usage worldwide, 
         helping to drastically lower carbon emissions and driving progress 
         toward Intel's long-term sustainability goals.
       </p>
+      <div class="overlay">
+        99% renewable electricity milestone reached.
+      </div>
     </div>
 
     <!-- Card 9: 2024 -->
-    <div>
+    <div class="card" style="scroll-snap-align: center; min-width: 350px;">
       <h2>2024</h2>
       <h3>Sustainability Summit</h3>
-      <img src="https://placehold.co/250x100" alt="Placeholder Image" />
+      <img src="img/9.png" alt="Placeholder Image" />
       <p>
         Intel hosts its first Sustainability Summit, uniting suppliers, 
         government officials, and industry leaders to collaborate on 
         next-generation sustainable semiconductor manufacturing.
       </p>
+      <div class="overlay">
+        First Sustainability Summit brings leaders together.
+      </div>
     </div>
   </section>
-  <p>Scroll to view timeline | Hover over cards to learn more!</p>
+
+  <!-- Timeline instructions for desktop (shown only on large screens) -->
+  <p class="show-desktop" style="text-align: center;">
+    Scroll to view timeline | Hover over cards to learn more!
+  </p>
+
+  <!-- Footer section starts here -->
+  <footer style="text-align: center; padding: 16px 0; color: #555;">
+    <!-- This is the footer. You can put copyright or other info here. -->
+    &copy; 2025 Intel Sustainability Timeline. For learning purposes only.
+  </footer>
 </body>
 </html>
